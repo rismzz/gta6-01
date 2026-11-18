@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Port Meridian — Make GTA 6</title>
+<link rel="icon" href="data:,">
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #1a1210; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+  #status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .hud { position: fixed; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.8); pointer-events: none; z-index: 5; }
+  #hud-top-left { top: 14px; left: 16px; }
+  #hud-cash { font-size: 30px; font-weight: 800; letter-spacing: .5px; }
+  #hud-stars { font-size: 22px; letter-spacing: 2px; margin-top: 2px; }
+  #health-bar { width: 170px; height: 10px; background: rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.6); margin-top: 6px; }
+  #hud-health { height: 100%; width: 100%; background: #37d67a; }
+  #hud-objective { top: 14px; left: 50%; transform: translateX(-50%); max-width: 46%; text-align: center; font-size: 17px; font-weight: 600; background: rgba(0,0,0,.45); padding: 8px 14px; border-radius: 8px; }
+  #minimap { position: fixed; top: 14px; right: 16px; width: 176px; height: 176px; border: 2px solid rgba(255,255,255,.75); border-radius: 6px; background: #20242c; z-index: 5; }
+  #hud-prompt { bottom: 88px; left: 50%; transform: translateX(-50%); font-size: 17px; font-weight: 600; background: rgba(0,0,0,.5); padding: 7px 14px; border-radius: 8px; }
+  #hud-speed { bottom: 22px; right: 20px; font-size: 30px; font-weight: 800; }
+  #hud-controls { bottom: 22px; left: 16px; font-size: 13px; opacity: .85; }
+  #toast { top: 84px; left: 50%; transform: translateX(-50%); font-size: 19px; font-weight: 700; color: #ffd23c; opacity: 0; transition: opacity .3s; }
+  #vignette { position: fixed; inset: 0; pointer-events: none; z-index: 4; opacity: 0; background: radial-gradient(ellipse at center, transparent 55%, rgba(200,0,0,.55) 100%); }
+  .screen { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; flex-direction: column; text-align: center; color: #fff; background: rgba(10,8,10,.62); z-index: 10; }
+  .screen h1 { font-size: 64px; margin: 0; letter-spacing: 3px; color: #ffd23c; text-shadow: 0 3px 0 #a52a2a, 0 6px 18px rgba(0,0,0,.7); }
+  .screen h2 { font-size: 20px; font-weight: 500; margin: 10px 0 0; max-width: 640px; line-height: 1.5; }
+  .screen p { font-size: 17px; margin: 18px 0 0; opacity: .95; }
+  .screen .keys { font-size: 14px; opacity: .85; line-height: 1.9; margin-top: 14px; }
+  #screen-title { display: flex; }
+</style>
+</head>
+<body>
+<canvas id="game" aria-label="Port Meridian: a 3D open-world crime game. Steal cars, run jobs for Vex, dodge the police."></canvas>
+<p id="status" role="status" aria-live="polite"></p>
+<div id="vignette"></div>
+<div class="hud" id="hud-top-left">
+  <div id="hud-cash">$0</div>
+  <div id="hud-stars">☆☆☆☆☆</div>
+  <div id="health-bar"><div id="hud-health"></div></div>
+</div>
+<div class="hud" id="hud-objective">Vex: Steal a car — walk up to one and press E.</div>
+<canvas id="minimap" width="176" height="176" aria-label="Minimap"></canvas>
+<div class="hud" id="hud-prompt"></div>
+<div class="hud" id="hud-speed"></div>
+<div class="hud" id="hud-controls">WASD move / drive · E enter car · F punch · Q shoot · Shift run · P pause · M mute</div>
+<div class="hud" id="toast"></div>
+<div class="screen" id="screen-title">
+  <h1>PORT MERIDIAN</h1>
+  <h2>An open-world crime game in the spirit of GTA 6. Mara Voss, driver-for-hire, has one week to make it in Port Meridian — a sun-soaked coastal city of 64 blocks, a beach and a marina — or get out.</h2>
+  <p>Press <b>Space</b> or click to start · <span id="title-best"></span></p>
+  <div class="keys">WASD move / drive · E enter or leave a car · F punch · Q shoot · Shift run<br>P pause · M mute · Mouse drag orbits the camera</div>
+</div>
+<div class="screen" id="screen-paused">
+  <h1>PAUSED</h1>
+  <p>Press <b>P</b> or <b>Space</b> to keep playing.</p>
+</div>
+<div class="screen" id="screen-over">
+  <h1>BUSTED OUT</h1>
+  <h2 id="over-stats"></h2>
+  <p>Press <b>Space</b> to try again.</p>
+</div>
+<div class="screen" id="screen-complete">
+  <h1>PORT MERIDIAN COMPLETE</h1>
+  <h2 id="complete-stats"></h2>
+  <p>Press <b>Space</b> to play again, free roam.</p>
+</div>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
