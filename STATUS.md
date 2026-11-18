@@ -19,7 +19,9 @@
     8b98af836828a638c7f925e3bbda3e671bd8f774f431c665536b8aad78ad5c92 (531,076 bytes,
     cover 0, 4 images, text 92,934 bytes < 163,840 cap).
   - Kit check: 4 passed, 0 failed (see below).
-- Final commit SHA: FILL_ME_IN
+- Build commit: f0aa7bf (the commit that built and verified this entry; the pushed
+  commit below adds only this SHA line to STATUS.md — no game file changed after
+  verification)
 - Dossier sha256: 8b98af836828a638c7f925e3bbda3e671bd8f774f431c665536b8aad78ad5c92
 
 SIAP SUBMIT — menunggu agen utama
