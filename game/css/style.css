@@ -1,0 +1,155 @@
+/* UNDERTOW — HUD and menu styling. Sun-bleached coral, teal water, night-neon accents. */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%; overflow: hidden; background: #0b1620;
+  font-family: "Avenir Next", "Segoe UI", Verdana, system-ui, sans-serif;
+  color: #fff; user-select: none; -webkit-user-select: none;
+}
+
+#game-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.hidden { display: none !important; }
+
+/* ---------- HUD frame ---------- */
+#hud { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
+#hud-top-left { position: absolute; top: 14px; left: 16px; max-width: 340px; }
+#clock-box {
+  display: inline-flex; gap: 10px; align-items: baseline;
+  background: rgba(6, 20, 30, .55); border-left: 4px solid #ffb347;
+  padding: 5px 12px; border-radius: 0 6px 6px 0;
+}
+#clock { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+#day-label { font-size: 11px; letter-spacing: 2px; color: #ffd9a0; }
+
+#objective-box {
+  margin-top: 8px; background: rgba(6, 20, 30, .55); border-radius: 6px;
+  padding: 8px 12px; border-left: 4px solid #39d0c4;
+}
+#objective-title { font-size: 12px; letter-spacing: 2px; color: #7de8e0; font-weight: 700; }
+#objective-text { font-size: 14px; line-height: 1.35; margin-top: 2px; text-shadow: 0 1px 2px #000; }
+#objective-distance { font-size: 12px; color: #ffd9a0; margin-top: 2px; font-weight: 700; }
+
+#hud-top-right { position: absolute; top: 12px; right: 16px; text-align: right; }
+#stars { font-size: 26px; letter-spacing: 3px; line-height: 1; }
+#stars .star { color: rgba(255,255,255,.18); text-shadow: 0 1px 3px rgba(0,0,0,.6); transition: color .15s; }
+#stars .star.on { color: #ffd23e; text-shadow: 0 0 8px rgba(255, 190, 40, .8), 0 1px 3px #000; }
+#stars.flash .star.on { color: #ff5147; }
+#money {
+  font-size: 30px; font-weight: 800; color: #8dff7a; letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0,0,0,.7); margin-top: 2px;
+}
+#weapon-box { font-size: 13px; letter-spacing: 2px; color: #e8f4ff; text-shadow: 0 1px 3px #000; }
+#weapon-ammo { color: #ffd9a0; margin-left: 8px; font-weight: 700; }
+
+#hud-bottom-left { position: absolute; left: 16px; bottom: 14px; }
+#minimap {
+  width: 220px; height: 220px; border-radius: 50%;
+  border: 3px solid rgba(255,255,255,.75); box-shadow: 0 4px 18px rgba(0,0,0,.55);
+  background: #12303c;
+}
+#district-label {
+  text-align: center; margin-top: 5px; font-size: 12px; letter-spacing: 3px;
+  color: #fff; text-shadow: 0 1px 3px #000; font-weight: 700;
+}
+
+#hud-bottom-right { position: absolute; right: 16px; bottom: 16px; width: 230px; }
+.bar-row { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
+.bar-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; width: 30px; text-align: right; text-shadow: 0 1px 2px #000; }
+.bar { flex: 1; height: 13px; background: rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.5); border-radius: 3px; overflow: hidden; }
+.fill { height: 100%; width: 100%; transition: width .18s ease-out; }
+.fill.health { background: linear-gradient(90deg, #ff5147, #ff8a5c); }
+.fill.armor { background: linear-gradient(90deg, #3e9bff, #7de8e0); }
+.fill.vehicle { background: linear-gradient(90deg, #ffd23e, #ffb347); }
+#speedo { text-align: right; margin-top: 6px; text-shadow: 0 2px 4px #000; }
+#speed-value { font-size: 34px; font-weight: 800; }
+#speed-unit { font-size: 12px; letter-spacing: 2px; margin-left: 5px; color: #ffd9a0; }
+
+/* ---------- banners, toasts, dialogue ---------- */
+#banner {
+  position: absolute; top: 22%; left: 50%; transform: translateX(-50%);
+  text-align: center; width: 90%; pointer-events: none;
+}
+#banner-title {
+  font-size: 52px; font-weight: 900; letter-spacing: 6px; color: #fff;
+  text-shadow: 0 0 22px rgba(255, 145, 60, .85), 0 3px 6px #000;
+}
+#banner-sub { font-size: 19px; letter-spacing: 2px; color: #ffd9a0; text-shadow: 0 2px 4px #000; margin-top: 4px; }
+
+#toast-box { position: absolute; top: 34%; left: 50%; transform: translateX(-50%); text-align: center; width: 80%; }
+.toast {
+  display: inline-block; background: rgba(6, 20, 30, .78); border: 1px solid rgba(125, 232, 224, .5);
+  padding: 7px 16px; border-radius: 20px; font-size: 15px; margin: 3px;
+  animation: toast-in .25s ease-out;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+#dialogue {
+  position: absolute; left: 50%; bottom: 120px; transform: translateX(-50%);
+  width: min(680px, 86%); background: rgba(5, 14, 22, .88); border-radius: 8px;
+  border-bottom: 4px solid #ffb347; padding: 13px 18px 10px; pointer-events: none;
+}
+#dialogue-name { font-size: 12px; letter-spacing: 2px; color: #ffb347; font-weight: 800; }
+#dialogue-text { font-size: 17px; line-height: 1.45; margin-top: 3px; }
+#dialogue-hint { text-align: right; font-size: 11px; color: #7de8e0; letter-spacing: 1px; }
+
+#prompt {
+  position: absolute; left: 50%; bottom: 84px; transform: translateX(-50%);
+  background: rgba(5, 14, 22, .8); padding: 7px 16px; border-radius: 16px;
+  font-size: 14px; letter-spacing: .5px; border: 1px solid rgba(255,255,255,.35);
+}
+
+#damage-vignette {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: radial-gradient(ellipse at center, transparent 52%, rgba(200, 10, 10, .55) 100%);
+  transition: opacity .12s;
+}
+.letterbox { position: absolute; left: 0; right: 0; height: 0; background: #000; transition: height .5s ease; z-index: 4; }
+#letterbox-top { top: 0; } #letterbox-bottom { bottom: 0; }
+body.cinematic .letterbox { height: 64px; }
+
+/* ---------- menus ---------- */
+.menu {
+  position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at 50% 120%, rgba(255, 145, 60, .25), rgba(4, 12, 20, .72) 65%);
+}
+.menu-card {
+  text-align: center; padding: 34px 44px; border-radius: 14px; max-width: 92vw;
+  background: rgba(5, 16, 26, .82); border: 1px solid rgba(125, 232, 224, .35);
+  box-shadow: 0 18px 60px rgba(0,0,0,.6); backdrop-filter: blur(3px);
+}
+.menu-card.wide { max-width: 620px; }
+.game-logo { font-size: 74px; font-weight: 900; letter-spacing: 4px; color: #fff; line-height: .95; }
+.game-logo span { color: #ffb347; text-shadow: 0 0 26px rgba(255, 145, 60, .8); }
+.game-tagline { font-size: 17px; letter-spacing: 5px; color: #7de8e0; margin: 6px 0 24px; text-transform: uppercase; }
+.menu-title { font-size: 34px; font-weight: 900; letter-spacing: 5px; margin-bottom: 18px; }
+.menu-btn {
+  display: block; width: 300px; margin: 9px auto; padding: 12px 10px; cursor: pointer;
+  font: 700 16px/1 "Avenir Next", "Segoe UI", Verdana, sans-serif; letter-spacing: 2px;
+  color: #eaf6ff; background: rgba(20, 50, 70, .85); border: 1px solid rgba(125, 232, 224, .45);
+  border-radius: 8px; transition: all .12s;
+}
+.menu-btn:hover { background: rgba(38, 92, 118, .95); transform: translateY(-1px); }
+.menu-btn.primary { background: linear-gradient(180deg, #ff9a3e, #f2762e); border-color: #ffc38a; color: #fff; }
+.menu-btn.primary:hover { background: linear-gradient(180deg, #ffab57, #ff8438); }
+.menu-foot { font-size: 12px; color: #cfe6f5; margin-top: 16px; letter-spacing: .5px; }
+.menu-foot.dim { color: #7d99ad; margin-top: 4px; }
+.pause-stats { font-size: 15px; line-height: 1.7; color: #d9eefb; margin-bottom: 14px; white-space: pre-line; }
+.help-grid { display: grid; grid-template-columns: 150px 1fr; gap: 7px 14px; text-align: left; font-size: 14px; margin-bottom: 12px; }
+.help-grid b { color: #ffd9a0; }
+.help-note { font-size: 13.5px; line-height: 1.55; color: #cfe6f5; text-align: left; margin-bottom: 16px; }
+
+.wasted-card { text-align: center; }
+.wasted-word { font-size: 92px; font-weight: 900; letter-spacing: 16px; color: #ff3b30; text-shadow: 0 0 34px rgba(255, 30, 30, .65), 0 4px 8px #000; }
+.wasted-word.busted { color: #3e9bff; text-shadow: 0 0 34px rgba(62, 155, 255, .65), 0 4px 8px #000; }
+.wasted-sub { font-size: 17px; color: #f2d8d8; margin: 8px 0 22px; text-shadow: 0 2px 4px #000; }
+#screen-wasted { background: radial-gradient(ellipse at center, rgba(60, 0, 0, .45), rgba(0,0,0,.88) 75%); }
+#screen-busted { background: radial-gradient(ellipse at center, rgba(0, 20, 60, .45), rgba(0,0,0,.88) 75%); }
+
+#fade { position: fixed; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .45s; z-index: 20; }
+#fade.on { opacity: 1; }
+#loading {
+  position: fixed; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center;
+  background: #0b1620; color: #7de8e0; font-size: 20px; letter-spacing: 4px;
+}
+

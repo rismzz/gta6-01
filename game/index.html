@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UNDERTOW — a Coral Bay crime story</title>
+<link rel="stylesheet" href="./css/style.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+<canvas id="game-canvas"></canvas>
+
+<!-- ======================= HUD ======================= -->
+<div id="hud" class="hidden">
+  <div id="hud-top-left">
+    <div id="clock-box"><span id="clock">08:00</span><span id="day-label">DAY 1</span></div>
+    <div id="objective-box">
+      <div id="objective-title">FREE ROAM</div>
+      <div id="objective-text">Explore Coral Bay. Find a phone booth to work.</div>
+      <div id="objective-distance"></div>
+    </div>
+  </div>
+
+  <div id="hud-top-right">
+    <div id="stars" aria-label="wanted level">
+      <span class="star" data-star="1">★</span><span class="star" data-star="2">★</span><span class="star" data-star="3">★</span><span class="star" data-star="4">★</span><span class="star" data-star="5">★</span>
+    </div>
+    <div id="money">$0</div>
+    <div id="weapon-box"><span id="weapon-name">FISTS</span><span id="weapon-ammo"></span></div>
+  </div>
+
+  <div id="hud-bottom-left">
+    <canvas id="minimap" width="220" height="220"></canvas>
+    <div id="district-label">CORAL BEACH</div>
+  </div>
+
+  <div id="hud-bottom-right">
+    <div class="bar-row"><span class="bar-label">HP</span><div class="bar"><div id="health-fill" class="fill health"></div></div></div>
+    <div class="bar-row"><span class="bar-label">AR</span><div class="bar"><div id="armor-fill" class="fill armor"></div></div></div>
+    <div class="bar-row" id="vehicle-row"><span class="bar-label">CAR</span><div class="bar"><div id="vehicle-fill" class="fill vehicle"></div></div></div>
+    <div id="speedo" class="hidden"><span id="speed-value">0</span><span id="speed-unit">MPH</span></div>
+  </div>
+
+  <div id="banner" class="hidden"><div id="banner-title"></div><div id="banner-sub"></div></div>
+  <div id="toast-box"></div>
+  <div id="dialogue" class="hidden">
+    <div id="dialogue-name"></div>
+    <div id="dialogue-text"></div>
+    <div id="dialogue-hint">E ▸</div>
+  </div>
+  <div id="prompt" class="hidden"></div>
+  <div id="damage-vignette"></div>
+  <div id="letterbox-top" class="letterbox"></div>
+  <div id="letterbox-bottom" class="letterbox"></div>
+</div>
+<!-- ======================= MENUS ======================= -->
+<div id="menu-main" class="menu">
+  <div class="menu-card">
+    <div class="game-logo">UNDER<span>TOW</span></div>
+    <div class="game-tagline">a Coral Bay crime story</div>
+    <button id="btn-continue" class="menu-btn hidden">CONTINUE — DAY <span id="continue-day">1</span></button>
+    <button id="btn-new" class="menu-btn primary">NEW GAME</button>
+    <button id="btn-help" class="menu-btn">HOW TO PLAY</button>
+    <div class="menu-foot">WASD drive &amp; move · E enter car · mouse aim · click fight · P pause</div>
+    <div class="menu-foot dim">An original game. Coral Bay, its people and its stories are invented.</div>
+  </div>
+</div>
+
+<div id="menu-pause" class="menu hidden">
+  <div class="menu-card">
+    <div class="menu-title">PAUSED</div>
+    <div id="pause-stats" class="pause-stats"></div>
+    <button id="btn-resume" class="menu-btn primary">RESUME</button>
+    <button id="btn-save" class="menu-btn">SAVE GAME</button>
+    <button id="btn-restart" class="menu-btn">RESTART DAY</button>
+    <button id="btn-quit" class="menu-btn">QUIT TO TITLE</button>
+  </div>
+</div>
+
+<div id="menu-help" class="menu hidden">
+  <div class="menu-card wide">
+    <div class="menu-title">HOW TO PLAY</div>
+    <div class="help-grid">
+      <div><b>W A S D / arrows</b></div><div>Move on foot · drive · steer</div>
+      <div><b>Shift</b></div><div>Sprint on foot · handbrake in a car</div>
+      <div><b>E</b></div><div>Enter / exit a car · talk · pick up · confirm</div>
+      <div><b>Mouse</b></div><div>Turn the camera · aim</div>
+      <div><b>Click / Space</b></div><div>Punch · fire the pistol once you own one</div>
+      <div><b>Q</b></div><div>Swap weapon (fists / pistol)</div>
+      <div><b>P or Esc</b></div><div>Pause · save from the pause menu</div>
+      <div><b>H</b></div><div>This help</div>
+    </div>
+    <p class="help-note">Work the glowing phone booths and gold markers to take jobs.
+    Taxi, courier, race and chop-shop icons repeat forever and pay cash.
+    A respray at any Pay &amp; Spray cools the Coral Bay PD off your tail.
+    Commit crimes and the stars climb — five stars brings roadblocks.</p>
+    <button id="btn-help-back" class="menu-btn primary">BACK</button>
+  </div>
+</div>
+
+<div id="screen-wasted" class="menu hidden">
+  <div class="wasted-card">
+    <div class="wasted-word">WASTED</div>
+    <div class="wasted-sub">The bay keeps what it catches.</div>
+    <button id="btn-wasted" class="menu-btn primary">WAKE UP AT ST. SIREN HOSPITAL</button>
+  </div>
+</div>
+
+<div id="screen-busted" class="menu hidden">
+  <div class="wasted-card">
+    <div class="wasted-word busted">BUSTED</div>
+    <div class="wasted-sub">Coral Bay PD walks you out at dawn, lighter in the pocket.</div>
+    <button id="btn-busted" class="menu-btn primary">WALK OUT</button>
+  </div>
+</div>
+
+<div id="fade"></div>
+<div id="loading">BUILDING CORAL BAY…</div>
+
+<script type="module" src="./js/main.js"></script>
+</body>
+</html>
